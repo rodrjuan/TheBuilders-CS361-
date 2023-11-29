@@ -12,9 +12,11 @@ def button_click(symbol):
         current = ""
     elif symbol == "(-)":
         current += " -"
-    elif symbol == "+" or "/" or "-" or "X":
+    elif symbol in ["+", "/", "-", "X", "x²"]:
         if symbol == "X":
-            current += " x "
+            current += " * "
+        elif symbol == "x²":
+            current += "²"
         else:
             current += " " + str(symbol) + " "
     else:
@@ -81,8 +83,21 @@ for i in range(5):
 root.grid_rowconfigure(0, weight=1)
 root.grid_columnconfigure(0, weight=1)
 
-# Binds configure event to when the button size expands
+
 frame.bind("<Configure>", update_button_sizes)
+
+def button_click_from_key(event):
+    valid_keys = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "+", "-", "%", "*", "/", ".", "^", "BackSpace"}
+
+    key = event.char if event.char in valid_keys else event.keysym
+
+    if key == "BackSpace":
+        button_click("Del")
+    elif key in valid_keys:
+        button_click(key)
+
+
+root.bind("<Key>", button_click_from_key)
 
 root.mainloop()
 
