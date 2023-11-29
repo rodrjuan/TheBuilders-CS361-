@@ -1,16 +1,37 @@
 from tkinter import *
 from tkinter import ttk
 
+
 def button_click(symbol):
     current = display_area.get("1.0", END).strip()
+    if symbol == "Del":
+        current = current[:-1]
+    elif symbol in ["Window", "Y-", "Zoom", "Trace", "Graph", "SC mode", "Conv", "Memory", "Enter"]:
+        current = current
+    elif symbol == "AC":
+        current = ""
+    elif symbol == "(-)":
+        current += " -"
+    elif symbol == "+" or "/" or "-" or "X":
+        if symbol == "X":
+            current += " x "
+        else:
+            current += " " + str(symbol) + " "
+    else:
+        current += str(symbol)
+
+
+    display_area.config(state=NORMAL)
     display_area.delete("1.0", END)
-    display_area.insert(END, current + str(symbol))
+    display_area.insert(END, current)
+    display_area.config(state=DISABLED)
 
 def update_button_sizes(event):
     for button in buttons:
         button.destroy()
 
     create_buttons()
+
 
 def create_buttons():
     for (text, row, col, colspan, width) in buttons_specs:
@@ -64,3 +85,4 @@ root.grid_columnconfigure(0, weight=1)
 frame.bind("<Configure>", update_button_sizes)
 
 root.mainloop()
+
