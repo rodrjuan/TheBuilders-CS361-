@@ -87,7 +87,7 @@ root.grid_columnconfigure(0, weight=1)
 frame.bind("<Configure>", update_button_sizes)
 
 def button_click_from_key(event):
-    valid_keys = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "+", "-", "%", "*", "/", ".", "^", "(", ")", "BackSpace"}
+    valid_keys = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "+", "-", "%", "*", "/", ".", "^", "(", ")", "BackSpace", "Enter"}
 
     key = event.char if event.char in valid_keys else event.keysym
 
