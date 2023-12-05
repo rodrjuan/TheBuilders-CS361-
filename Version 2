@@ -1,0 +1,72 @@
+import customtkinter as ctk
+
+
+# Your other imports
+# ...
+
+def button_click(symbol):
+# Your button_click function remains unchanged
+    pass
+# The rest of your code
+def update_button_sizes():
+    pass
+
+def create_buttons():
+    pass
+    
+def button_click_from_key(event):
+    valid_keys = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "+", "-", "%", "*", "/", ".", "^", "(", ")", "BackSpace", "Enter"}
+    key = event.char if event.char in valid_keys else event.keysym
+    if key == "BackSpace":
+        button_click("Del")
+    elif key in valid_keys:
+        button_click(key)
+
+# Creates calculator frame / window
+root = ctk.CTk()
+root.title("Calculator")
+root.geometry("400x600")
+
+frame = ctk.CTkFrame(root)
+frame.grid(row=0, column=0, sticky="nsew")
+
+
+
+# Displays what the user inputs / the answers
+display_area = ctk.CTkEntry(frame, width=40, height=3, font=("Arial", 16), state="disabled")
+display_area.grid(row=0, column=0, columnspan=5, padx=(5, 10), pady=(5, 20))  # Aligns with buttons
+
+# All the buttons
+buttons_specs = [
+    # ... (unchanged)
+]
+
+buttons = []
+
+# Creates the initial button display on calculator
+create_buttons()
+    
+# Creates row / column weights so that the buttons expand when the calculator size is changed
+for i in range(9):
+    frame.grid_rowconfigure(i, weight=1)
+for i in range(5):
+    frame.grid_columnconfigure(i, weight=1)
+
+root.grid_rowconfigure(0, weight=1)
+root.grid_columnconfigure(0, weight=1)
+
+frame.bind("<Configure>", update_button_sizes)
+
+# def button_click_from_key(event):
+#     valid_keys = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "+", "-", "%", "*", "/", ".", "^", "(", ")", "BackSpace", "Enter"}
+# 
+#     key = event.char if event.char in valid_keys else event.keysym
+# 
+#     if key == "BackSpace":
+#         button_click("Del")
+#     elif key in valid_keys:
+#         button_click(key)
+
+root.bind("<Key>", button_click_from_key)
+
+root.mainloop()
