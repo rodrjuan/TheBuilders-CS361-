@@ -1,4 +1,4 @@
-# Many parts of this graphing calculator are attributed to this open-source implentation https://github.com/bkthomps/GraphingCalculator
+# Many parts of this graphing calculator are attributed to this open-source implementation: https://github.com/bkthomps/GraphingCalculator
 # This version however does have many changes and additions, such as the class layout, code documentation, keyboard shortcuts
 # and an interface that matches with the rest of our program.
 
