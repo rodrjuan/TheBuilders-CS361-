@@ -50,7 +50,7 @@ class UnitConverter:
         if len(parse_list) > 2:
             parse_list[2] = float(PREFIXES[parse_list[2]])
         else:
-            parse_list.extend(["",""])
+            parse_list.extend([1,""])
         return parse_list
     
     """
@@ -119,7 +119,7 @@ class UnitConverter:
         return str(val) + to_unit
     
     def convertSameSystemLength(self, parse1, parse2):
-        return float(parse1[0] * parse1[1]/(parse2[0] * parse2[1]))
+        return float((parse1[0] * parse1[2] /parse2[2]))
     
 
     def convertUnits(self, expr1, expr2):
@@ -128,7 +128,11 @@ class UnitConverter:
 
         # case 1: both metric
         if parse1[1] == parse2[1] == "m":
-            return str(self.convertSameSystemLength(parse1, parse2)) + parse2[2] + "m"
+            x = ""
+            for c in self.prefixes:
+                if self.prefixes[c] == parse2[2]:
+                    x = c
+            return str(self.convertSameSystemLength(parse1, parse2)) + x + "m"
 
     
         return None
