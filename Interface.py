@@ -30,15 +30,12 @@ def button_click(symbol):
     elif symbol == "Enter":
         if "x" in current:
             result = solve_single_variable_equation(current)
-            display_area.config(state=NORMAL)
-            display_area.delete("1.0", END)
-            display_area.insert(END, current)
-            display_area.config(state=DISABLED)
-        else:
-            display_area.config(state=NORMAL)
-            display_area.delete("1.0", END)
-            display_area.insert(END, current)
-            display_area.config(state=DISABLED)
+            calculations.append((current, result))
+            current = f"{current} \n{result[0]}"
+        display_area.config(state=NORMAL)
+        display_area.delete("1.0", END)
+        display_area.insert(END, current)
+        display_area.config(state=DISABLED)
     else:
         current += str(symbol)
 
@@ -122,4 +119,3 @@ def button_click_from_key(event):
 root.bind("<Key>", button_click_from_key)
 
 root.mainloop()
-
