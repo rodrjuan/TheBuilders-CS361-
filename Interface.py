@@ -1,24 +1,39 @@
 from tkinter import *
 from tkinter import ttk
+from singlevar import solve_single_variable_equation
 
 
 def button_click(symbol):
     current = display_area.get("1.0", END).strip()
     if symbol == "Del":
         current = current[:-1]
-    elif symbol in ["Window", "Y-", "Zoom", "Trace", "Graph", "SC mode", "Conv", "Memory", "Enter"]:
+    elif symbol in ["Graph", "SC mode", "Conv", "Memory"]:
         current = current
     elif symbol == "AC":
         current = ""
     elif symbol == "(-)":
         current += " -"
-    elif symbol in ["+", "/", "-", "X", "x²"]:
-        if symbol == "X":
+    elif symbol in ["+", "/", "-", "*", "x²"]:
+        if symbol == "*":
             current += " * "
         elif symbol == "x²":
             current += "²"
         else:
             current += " " + str(symbol) + " "
+    elif symbol == "X":
+        current += "x"
+    elif symbol == "Enter":
+        if "X" in current:
+            result = solve_single_variable_equation(current)
+            display_area.config(state=NORMAL)
+            display_area.delete("1.0", END)
+            display_area.insert(END, current)
+            display_area.config(state=DISABLED)
+        else:
+            display_area.config(state=NORMAL)
+            display_area.delete("1.0", END)
+            display_area.insert(END, current)
+            display_area.config(state=DISABLED)
     else:
         current += str(symbol)
 
@@ -58,10 +73,9 @@ display_area.grid(row=0, column=0, columnspan=5, padx=(5, 10), pady=(5, 20))  #A
 
 #all the buttons
 buttons_specs = [
-    ("Y-", "1", "0", "1", 0.75), ("Window", "1", "1", "1", 0.75), ("Zoom", "1", "2", "1", 0.75),
-    ("Trace", "1", "3", "1", 0.75), ("Graph", "1", "4", "1", 0.75),
-    ("^", "4", "0", "1", 1),("SC mode", "3", "1", "1", 1), ("Conv", "3", "2", "1", 1), ("Memory", "3", "3", "1", 1),
-    ("x²", "5", "0", "1", 1),("Del", "3", "0", "1", 1), ("(", "4", "2", "1", 1), (")", "4", "3", "1", 1), ("X", "4", "4", "1", 1),
+    ("X", "1", "0", "1", 0.75), ("Graph", "1", "4", "1", 0.75),
+    ("^", "4", "0", "1", 1),("SC mode", "1", "1", "1", 1), ("Conv", "1", "2", "1", 1), ("Memory", "1", "3", "1", 1),
+    ("x²", "5", "0", "1", 1),("Del", "3", "0", "1", 1), ("(", "4", "2", "1", 1), (")", "4", "3", "1", 1), ("*", "4", "4", "1", 1),
     ("π", "7", "0", "1", 1),("1", "5", "1", "1", 1), ("2", "5", "2", "1", 1), ("3", "5", "3", "1", 1), ("/", "5", "4", "1", 1),
     ("(-)", "4", "1", "1", 1),("4", "6", "1", "1", 1), ("5", "6", "2", "1", 1), ("6", "6", "3", "1", 1), ("-", "6", "4", "1", 1),
     ("%", "8", "0", "1", 1),("7", "7", "1", "1", 1), ("8", "7", "2", "1", 1), ("9", "7", "3", "1", 1), ("+", "7", "4", "1", 1),
@@ -87,12 +101,14 @@ root.grid_columnconfigure(0, weight=1)
 frame.bind("<Configure>", update_button_sizes)
 
 def button_click_from_key(event):
-    valid_keys = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "+", "-", "%", "*", "/", ".", "^", "(", ")", "BackSpace", "Enter"}
+    valid_keys = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "+", "-", "%", "*", "/", ".", "^", "(", ")", "BackSpace", "Enter", "x"}
 
     key = event.char if event.char in valid_keys else event.keysym
 
     if key == "BackSpace":
         button_click("Del")
+    elif key == "x":
+        button_click("X")
     elif key in valid_keys:
         button_click(key)
 
