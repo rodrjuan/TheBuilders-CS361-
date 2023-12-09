@@ -1,14 +1,19 @@
 from tkinter import *
 from tkinter import ttk
 from singlevar import solve_single_variable_equation
-
+from Graph import Graph
+from Memory import show_memory
 
 def button_click(symbol):
     current = display_area.get("1.0", END).strip()
     if symbol == "Del":
         current = current[:-1]
-    elif symbol in ["Graph", "SC mode", "Conv", "Memory"]:
+    elif symbol in ["SC mode", "Conv"]:
         current = current
+    elif symbol == "Graph":
+        graph = Graph()
+    elif symbol == "Memory":
+        show_memory(calculations)
     elif symbol == "AC":
         current = ""
     elif symbol == "(-)":
@@ -83,6 +88,7 @@ buttons_specs = [
 ]
 
 buttons = []
+calculations = []
 
 # Creates the initial button display on calculator
 create_buttons()
