@@ -8,7 +8,7 @@ def solve_single_variable_equation(equation_str):
     equation_str = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', equation_str)
 
     try:
-        equation = Eq(simplify(equation_str), 0)
+        equation = Eq(eval(equation_str), 0)
         solution = solve(equation, x)
 
         return solution

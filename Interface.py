@@ -16,26 +16,40 @@ def button_click(symbol):
         show_memory(calculations)
     elif symbol == "AC":
         current = ""
+    elif symbol == "^":
+        current += "**"
+    elif symbol == "√":
+        current += "sqrt("
     elif symbol == "(-)":
         current += " -"
+    elif symbol == "π":
+        current += "pi"
     elif symbol in ["+", "/", "-", "*", "x²"]:
         if symbol == "*":
             current += " * "
         elif symbol == "x²":
-            current += "²"
+            current += "**2"
         else:
             current += " " + str(symbol) + " "
     elif symbol == "X":
         current += "x"
-    elif symbol == "Enter":
+    elif symbol == "Enter" or symbol == "Return":
         if "x" in current:
             result = solve_single_variable_equation(current)
             calculations.append((current, result))
             current = f"{current} \n{result[0]}"
-        display_area.config(state=NORMAL)
-        display_area.delete("1.0", END)
-        display_area.insert(END, current)
-        display_area.config(state=DISABLED)
+            display_area.config(state=NORMAL)
+            display_area.delete("1.0", END)
+            display_area.insert(END, current)
+            display_area.config(state=DISABLED)
+        else:
+            currentcopy = current
+            current = eval(current)
+            display_area.config(state=NORMAL)
+            display_area.delete("1.0", END)
+            display_area.insert(END, current)
+            display_area.config(state=DISABLED)
+            calculations.append(f'{currentcopy} = {current}')
     else:
         current += str(symbol)
 
@@ -104,7 +118,7 @@ root.grid_columnconfigure(0, weight=1)
 frame.bind("<Configure>", update_button_sizes)
 
 def button_click_from_key(event):
-    valid_keys = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "+", "-", "%", "*", "/", ".", "^", "(", ")", "BackSpace", "Enter", "x"}
+    valid_keys = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "+", "-", "%", "*", "/", ".", "^", "(", ")", "BackSpace", "Enter", "Return", "x"}
 
     key = event.char if event.char in valid_keys else event.keysym
 
@@ -119,3 +133,4 @@ def button_click_from_key(event):
 root.bind("<Key>", button_click_from_key)
 
 root.mainloop()
+
