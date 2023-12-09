@@ -1,6 +1,4 @@
 # import dependencies
-import sympy.physics.units as u
-from sympy.physics.units.systems import SI
 
 
 # unit converter constants
@@ -50,7 +48,9 @@ class UnitConverter:
 
         # if the expression has a prefix, convert to its table value, i.e. a number.
         if len(parse_list) > 2:
-            parse_list[2] = PREFIXES[parse_list[2]]
+            parse_list[2] = float(PREFIXES[parse_list[2]])
+        else:
+            parse_list.extend(["",""])
         return parse_list
     
     """
@@ -102,13 +102,35 @@ class UnitConverter:
         else:
             return val
 
-    def convertMetricLength(self, parse1, parse2):
-        return float( parse1[0] * parse1[1]/(parse2[0] * parse2[1]))
+    """
+     Function: convertTemps()
+     Return the tempurature from one tempature unit to another given unit
+    """    
+    def convertTemps(self, temp, to_unit):
+        parse = self.tempSyntaxParser(temp)
+
+        if to_unit == "C":
+            val = self.toCelcius(parse[0], parse[1])
+        elif to_unit == "F":
+            val = self.toFahrenheit(parse[0], parse[1])
+        else:
+            val = self.toKelvin(parse[0], parse[1])
+
+        return str(val) + to_unit
+    
+    def convertSameSystemLength(self, parse1, parse2):
+        return float(parse1[0] * parse1[1]/(parse2[0] * parse2[1]))
     
 
-    def convert(self, expr1, expr2):
+    def convertUnits(self, expr1, expr2):
         parse1 = self.syntaxParser(expr1)
         parse2 = self.syntaxParser(expr2)
 
+        # case 1: both metric
+        if parse1[1] == parse2[1] == "m":
+            return str(self.convertSameSystemLength(parse1, parse2)) + parse2[2] + "m"
+
+    
         return None
-        
+
+
