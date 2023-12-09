@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from tkinter import Text, ttk
+import singlevar
 
 # Your other imports
 # ...
@@ -21,6 +22,18 @@ def button_click(symbol):
             current += "²"
         else:
             current += " " + str(symbol) + " "
+    elif symbol == "Enter":
+        if "X" in current:
+            result = solve_single_variable_equation(current)
+            display_area.config(state=ctk.NORMAL)
+            display_area.delete("1.0", ctk.END)
+            display_area.insert(ctk.END, f"Solution(s): {result}")
+            display_area.config(state=ctk.DISABLED)
+        else:
+            display_area.config(state=ctk.NORMAL)
+            display_area.delete("1.0", ctk.END)
+            display_area.insert(ctk.END, current)
+            display_area.config(state=ctk.DISABLED)
     else:
         current += str(symbol)
 
