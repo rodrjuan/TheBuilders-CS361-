@@ -23,7 +23,7 @@ def button_click(symbol):
     elif symbol == "X":
         current += "x"
     elif symbol == "Enter":
-        if "X" in current:
+        if "x" in current:
             result = solve_single_variable_equation(current)
             display_area.config(state=NORMAL)
             display_area.delete("1.0", END)
