@@ -33,9 +33,11 @@ def button_click(symbol):
             current += " " + str(symbol) + " "
     elif symbol == "X":
         current += "x"
-    elif symbol == "Enter" or "Return":
+    elif symbol == "Enter" or symbol == "Return":
         if "x" in current:
             result = solve_single_variable_equation(current)
+            calculations.append((current, result))
+            current = f"{current} \n{result[0]}"
             display_area.config(state=NORMAL)
             display_area.delete("1.0", END)
             display_area.insert(END, current)
