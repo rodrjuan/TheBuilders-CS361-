@@ -26,7 +26,7 @@ def show_memory(calculations):
 
     #create a line of text for every calculation
     for i, calculation in enumerate(calculations):
-        text.insert(f'{i + 1}.0', f'{calculation}\n')   
+        text.insert(f'{i + 1}.0', f'{calculation}\n')
 
     #create callback function that copys line of text to clipboard on click
     text.bind("<Button-1>", lambda e:copy_to_clipboard(e, text))

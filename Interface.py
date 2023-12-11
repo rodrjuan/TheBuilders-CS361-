@@ -3,14 +3,31 @@ from tkinter import ttk
 from singlevar import solve_single_variable_equation
 from Graph import Graph
 from Memory import show_memory
+from Trigonometry import calculate_trig_function
 from math import *
 
 def button_click(symbol):
     current = display_area.get("1.0", END).strip()
     if symbol == "Del":
         current = current[:-1]
-    elif symbol in ["SC mode", "Conv"]:
+    elif symbol in ["Conv"]:
         current = current
+    elif symbol == "SC mode":
+        buttons_specs[0] = ("X", "1", "0", "1", 0.75, 0)
+        buttons_specs[17] = ("Del", "1", "0", "1", 0.75, 1)
+        buttons_specs[13] = ("SC mode", "1", "1", "1", 1, 0)
+        for i in range(2, 12):
+            buttons_specs[i] = (*buttons_specs[i][:5], 1)
+        update_button_sizes(None)
+    elif symbol == "Normal mode":
+        buttons_specs[0] = ("X", "1", "0", "1", 0.75, 1)
+        buttons_specs[17] = ("Del", "3", "0", "1", 1, 1)
+        buttons_specs[13] = ("SC mode", "1", "1", "1", 1, 1)
+        for i in range(2, 12):
+            buttons_specs[i] = (*buttons_specs[i][:5], 0)
+        update_button_sizes(None)
+    elif symbol in ["tan", "sin", "cos", "cos⁻¹", "tan⁻¹", "sin⁻¹", "log", "ln"]:
+        current = f"{symbol}("
     elif symbol == "Graph":
         graph = Graph()
     elif symbol == "Memory":
@@ -38,13 +55,25 @@ def button_click(symbol):
         current += root.selection_get(selection='CLIPBOARD')
     elif symbol == "Enter" or symbol == "Return":
         if "x" in current:
-            result = solve_single_variable_equation(current)
-            calculations.append((current, result))
-            current = f"{current} \n{result[0]}"
+            try:
+                result = solve_single_variable_equation(current)
+                calculations.append((current, result))
+                current = f"{current} \n{result[0]}"
+            except Exception as e:
+                current = f"{e}"
             display_area.config(state=NORMAL)
             display_area.delete("1.0", END)
             display_area.insert(END, current)
             display_area.config(state=DISABLED)
+        elif symbol in current in ["tan", "sin", "cos", "cos⁻¹", "tan⁻¹", "sin⁻¹"]:
+            trig_function, angle = current.split("(")
+            angle = float(angle[:-1])
+
+            # Call the calculate_trig_function from Trigonometry.py
+            result, original_result = calculate_trig_function(trig_function, angle)
+            calculations.append((current, result))
+            current = f"{current} \n{result[0]} ({original_result})"
+
         else:
             currentcopy = current
             addtomemory = TRUE
@@ -78,12 +107,12 @@ def update_button_sizes(event):
 
 
 def create_buttons():
-    for (text, row, col, colspan, width) in buttons_specs:
-        button_text = f" {text} "  # Add spaces for padding between buttons
-        button = ttk.Button(frame, text=button_text, command=lambda t=text: button_click(t))
-        button.grid(row=int(row), column=int(col), columnspan=int(colspan), pady=5, padx=(5, 10), sticky="nsew")
-
-        buttons.append(button)
+    for (text, row, col, colspan, width, visible) in buttons_specs:
+        if visible == 1:
+            button_text = f" {text} "  # Add spaces for padding between buttons
+            button = ttk.Button(frame, text=button_text, command=lambda t=text: button_click(t))
+            button.grid(row=int(row), column=int(col), columnspan=int(colspan), pady=5, padx=(5, 10), sticky="nsew")
+            buttons.append(button)
 
 
 # Creates calculator frame / window
@@ -100,13 +129,15 @@ display_area.grid(row=0, column=0, columnspan=5, padx=(5, 10), pady=(5, 20))  #A
 
 #all the buttons
 buttons_specs = [
-    ("X", "1", "0", "1", 0.75), ("Graph", "1", "4", "1", 0.75),
-    ("^", "4", "0", "1", 1),("SC mode", "1", "1", "1", 1), ("Conv", "1", "2", "1", 1), ("Memory", "1", "3", "1", 1),
-    ("x²", "5", "0", "1", 1),("Del", "3", "0", "1", 1), ("(", "4", "2", "1", 1), (")", "4", "3", "1", 1), ("*", "4", "4", "1", 1),
-    ("π", "7", "0", "1", 1),("1", "5", "1", "1", 1), ("2", "5", "2", "1", 1), ("3", "5", "3", "1", 1), ("/", "5", "4", "1", 1),
-    ("(-)", "4", "1", "1", 1),("4", "6", "1", "1", 1), ("5", "6", "2", "1", 1), ("6", "6", "3", "1", 1), ("-", "6", "4", "1", 1),
-    ("%", "8", "0", "1", 1),("7", "7", "1", "1", 1), ("8", "7", "2", "1", 1), ("9", "7", "3", "1", 1), ("+", "7", "4", "1", 1),
-    ("AC", "3", "4", "1", 1),("0", "8", "1", "2", 1), (".", "8", "3", "1", 1), ("Enter", "8", "4", "1", 1), ("√", "6", "0", "1", 1)
+    ("X", "1", "0", "1", 0.75, 1), ("Graph", "1", "4", "1", 0.75, 1), ("sin", "2", "0", "1", 1, 0), ("sin⁻¹", "3", "0", "1", 1, 0),
+    ("cos", "2", "1", "1", 1, 0), ("cos⁻¹", "3", "1", "1", 1, 0), ("tan", "2", "2", "1", 1, 0), ("tan⁻¹", "3", "2", "1", 1, 0),
+    ("log", "2", "3", "1", 1, 0), ("ln", "2", "4", "1", 1, 0), ("e", "3", "3", "1", 1, 0), ("Normal mode", "1", "1", "1", 1, 0),
+    ("^", "4", "0", "1", 1, 1),("SC mode", "1", "1", "1", 1, 1), ("Conv", "1", "2", "1", 1, 1), ("Memory", "1", "3", "1", 1, 1),
+    ("x²", "5", "0", "1", 1, 1),("Del", "3", "0", "1", 1, 1), ("(", "4", "2", "1", 1, 1), (")", "4", "3", "1", 1, 1), ("*", "4", "4", "1", 1, 1),
+    ("π", "7", "0", "1", 1, 1),("1", "5", "1", "1", 1, 1), ("2", "5", "2", "1", 1, 1), ("3", "5", "3", "1", 1, 1), ("/", "5", "4", "1", 1, 1),
+    ("(-)", "4", "1", "1", 1, 1),("4", "6", "1", "1", 1, 1), ("5", "6", "2", "1", 1, 1), ("6", "6", "3", "1", 1, 1), ("-", "6", "4", "1", 1, 1),
+    ("%", "8", "0", "1", 1, 1),("7", "7", "1", "1", 1, 1), ("8", "7", "2", "1", 1, 1), ("9", "7", "3", "1", 1, 1), ("+", "7", "4", "1", 1, 1),
+    ("AC", "3", "4", "1", 1, 1),("0", "8", "1", "2", 1, 1), (".", "8", "3", "1", 1, 1), ("Enter", "8", "4", "1", 1, 1), ("√", "6", "0", "1", 1, 1)
 ]
 
 buttons = []

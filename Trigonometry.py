@@ -15,5 +15,9 @@ def calculate_trig_function(func, angle):
         return math.degrees(math.acos(angle)), math.acos(angle)
     elif func == 'atan':
         return math.degrees(math.atan(angle)), math.atan(angle)
+    elif func == 'log':
+        return math.log10(angle), math.log10(angle)
+    elif func == 'ln':
+        return math.log(angle), math.log(angle)
     else:
         return None
