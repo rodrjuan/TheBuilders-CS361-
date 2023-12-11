@@ -3,6 +3,7 @@ from tkinter import ttk
 from singlevar import solve_single_variable_equation
 from Graph import Graph
 from Memory import show_memory
+from math import *
 
 def button_click(symbol):
     current = display_area.get("1.0", END).strip()
@@ -21,16 +22,16 @@ def button_click(symbol):
     elif symbol == "√":
         current += "sqrt("
     elif symbol == "(-)":
-        current += " -"
+        current += "-"
     elif symbol == "π":
         current += "pi"
     elif symbol in ["+", "/", "-", "*", "x²"]:
         if symbol == "*":
-            current += " * "
+            current += "*"
         elif symbol == "x²":
             current += "**2"
         else:
-            current += " " + str(symbol) + " "
+            current += str(symbol)
     elif symbol == "X":
         current += "x"
     elif symbol == "Enter" or symbol == "Return":
@@ -44,7 +45,11 @@ def button_click(symbol):
             display_area.config(state=DISABLED)
         else:
             currentcopy = current
-            current = eval(current)
+            try:
+                current = eval(current)
+            except:
+                current = "SYNTAX ERROR"
+            
             display_area.config(state=NORMAL)
             display_area.delete("1.0", END)
             display_area.insert(END, current)
