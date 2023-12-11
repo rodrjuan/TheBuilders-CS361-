@@ -34,6 +34,8 @@ def button_click(symbol):
             current += str(symbol)
     elif symbol == "X":
         current += "x"
+    elif symbol == "paste":
+        current += root.selection_get(selection='CLIPBOARD')
     elif symbol == "Enter" or symbol == "Return":
         if "x" in current:
             result = solve_single_variable_equation(current)
@@ -137,6 +139,8 @@ def button_click_from_key(event):
         button_click("X")
     elif key in valid_keys:
         button_click(key)
+    elif key == "v" and event.state == 4:
+        button_click("paste")
 
 
 root.bind("<Key>", button_click_from_key)
