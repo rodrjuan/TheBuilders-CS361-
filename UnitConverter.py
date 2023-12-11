@@ -128,6 +128,13 @@ class UnitConverter:
     
     def __convertImperial(self, parse1, parse2):
         return float(parse1[0] * parse1[1] / parse2[1])
+    
+    def __convertItoM(self,parse1,parse2):
+
+        # convert both units to inches and meters, respectively
+        val1 = self.__convertImperial(parse1, [1,1,1,""])
+        val2 = self.__convertMetric(parse2,[1,"m",1,""])
+
 
     def convertLength(self, expr1, expr2):
         parse1 = self.__syntaxParser(expr1)
@@ -140,13 +147,19 @@ class UnitConverter:
                 if self.__prefixes[c] == parse2[2]:
                     x = c
             return str(self.__convertMetric(parse1, parse2)) + x + "m"
+        # case 2: both imperial
         elif parse1[1] != "m" and parse2[1] != "m":
             s = str(self.__convertImperial(parse1,parse2))
             for c in self.__lengths:
                 if self.__lengths[c] == parse2[1]:
                     s += c
+        
 
             return s
+        
+        # case 3: convert from metric to imperial
+        elif parse1[1] == "m" and parse2[1] != "m":
+
 
     
         return None
