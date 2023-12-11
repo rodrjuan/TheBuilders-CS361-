@@ -3,6 +3,7 @@ from tkinter import ttk
 from singlevar import solve_single_variable_equation
 from Graph import Graph
 from Memory import show_memory
+from math import *
 
 def button_click(symbol):
     current = display_area.get("1.0", END).strip()
@@ -21,18 +22,20 @@ def button_click(symbol):
     elif symbol == "√":
         current += "sqrt("
     elif symbol == "(-)":
-        current += " -"
+        current += "-"
     elif symbol == "π":
         current += "pi"
     elif symbol in ["+", "/", "-", "*", "x²"]:
         if symbol == "*":
-            current += " * "
+            current += "*"
         elif symbol == "x²":
             current += "**2"
         else:
-            current += " " + str(symbol) + " "
+            current += str(symbol)
     elif symbol == "X":
         current += "x"
+    elif symbol == "paste":
+        current += root.selection_get(selection='CLIPBOARD')
     elif symbol == "Enter" or symbol == "Return":
         if "x" in current:
             result = solve_single_variable_equation(current)
@@ -44,12 +47,20 @@ def button_click(symbol):
             display_area.config(state=DISABLED)
         else:
             currentcopy = current
-            current = eval(current)
+            addtomemory = TRUE
+            try:
+                current = eval(current)
+            except:
+                current = "SYNTAX ERROR"
+                addtomemory = FALSE
+            
             display_area.config(state=NORMAL)
             display_area.delete("1.0", END)
             display_area.insert(END, current)
             display_area.config(state=DISABLED)
-            calculations.append(f'{currentcopy} = {current}')
+
+            if addtomemory:
+                calculations.append(f'{currentcopy} = {current}')
     else:
         current += str(symbol)
 
@@ -128,6 +139,8 @@ def button_click_from_key(event):
         button_click("X")
     elif key in valid_keys:
         button_click(key)
+    elif key == "v" and event.state == 4:
+        button_click("paste")
 
 
 root.bind("<Key>", button_click_from_key)
