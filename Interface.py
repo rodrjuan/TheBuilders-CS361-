@@ -45,16 +45,20 @@ def button_click(symbol):
             display_area.config(state=DISABLED)
         else:
             currentcopy = current
+            addtomemory = TRUE
             try:
                 current = eval(current)
             except:
                 current = "SYNTAX ERROR"
+                addtomemory = FALSE
             
             display_area.config(state=NORMAL)
             display_area.delete("1.0", END)
             display_area.insert(END, current)
             display_area.config(state=DISABLED)
-            calculations.append(f'{currentcopy} = {current}')
+
+            if addtomemory:
+                calculations.append(f'{currentcopy} = {current}')
     else:
         current += str(symbol)
 
