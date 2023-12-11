@@ -2,14 +2,21 @@
 
 
 # unit converter constants
-IM_LENGTHS = {
+LENGTHS = {
     "in": 1.00,
     "ft": 12.00,
     "yd": 36.00,
     "mi": 63360.00,
     "m": "m"
 }
-# WEIGHTS = ["g","pd","oz","ton"]
+MASSES = {
+    "g":1,
+    "kg":1000,
+    "mg":pow(10,-3),
+    "oz":1,
+    "lb":16,
+    "ton":2000
+}
 PREFIXES = {
     "T":pow(10,12),
     "G":pow(10,9),
@@ -31,8 +38,9 @@ Unit Converter Class
 class UnitConverter:
     # Constructor Method
     def __init__(self):
-        self.__lengths = IM_LENGTHS
+        self.__lengths = LENGTHS
         self.__prefixes = PREFIXES
+        self.__masses = MASSES
 
     """
     Function: syntax_parser()
@@ -72,6 +80,37 @@ class UnitConverter:
         # second element should be the unit, leave as is.
         # return the parse_list
         return parse_list
+
+    def __massSyntaxParser(self,expr):
+        parse_list = expr.split(" ")
+        
+        parse_list[0] = float(parse_list[0])
+
+        return parse_list
+    
+    def convertMass(self, unit, to_unit):
+        parse = self.__massSyntaxParser(unit)
+
+        # case1: metric
+        if parse[1].endswith("g") and to_unit.endswith("g"):
+            return str(float(parse[0] * self.__masses[parse[1]]/ self.__masses[to_unit])) + to_unit
+        # case2: imperial
+        elif parse[1].endswith("g") == False and to_unit.endswith("g") == False:
+            return str(float(parse[0] * self.__masses[parse[1]]/ self.__masses[to_unit])) + to_unit
+        # case3: MtoI
+        elif parse[1].endswith("g") and to_unit.endswith("g") == False:
+            val = float(parse[0] * self.__masses[parse[1]]/ self.__masses["g"])
+
+            val = val/28.35
+
+            return str(val * self.__masses["oz"]/ self.__masses[to_unit]) + to_unit
+        # case4: ItoM
+        else:
+            val = float(parse[0] * self.__masses[parse[1]]/ self.__masses["oz"])
+
+            val = val * 28.35
+
+            return str(val * self.__masses["g"]/ self.__masses[to_unit]) + to_unit
 
     """
      Function: toCelcius()
@@ -124,16 +163,32 @@ class UnitConverter:
         return str(val) + to_unit
     
     def __convertMetric(self, parse1, parse2):
-        return float((parse1[0] * parse1[2] /parse2[2]))
+        return float((parse1[0] * parse1[2] /parse2[2]) + parse2[0])
     
     def __convertImperial(self, parse1, parse2):
-        return float(parse1[0] * parse1[1] / parse2[1])
+        return float((parse1[0] * parse1[1] / parse2[1]) + parse2[0])
     
     def __convertItoM(self,parse1,parse2):
+        
+        # convert the input to inches
+        val = self.__convertImperial(parse1,[0,1,1,""])
 
-        # convert both units to inches and meters, respectively
-        val1 = self.__convertImperial(parse1, [1,1,1,""])
-        val2 = self.__convertMetric(parse2,[1,"m",1,""])
+        # convert to meters
+        factor = val/5280.00
+
+        # convert from meters to desired output
+        return self.__convertMetric([factor,"m",1,""], parse2)
+
+
+    def __convertMtoI(self,parse1,parse2):
+        # convert the input to meters
+        val = self.__convertMetric(parse1, [0,"m",1,""])
+        
+        # convert to inches
+        factor = val * 39.37
+
+        # convert from inches to desired output
+        return self.__convertImperial([factor,1,1,""], parse2)
 
 
     def convertLength(self, expr1, expr2):
@@ -154,14 +209,32 @@ class UnitConverter:
                 if self.__lengths[c] == parse2[1]:
                     s += c
         
-
             return s
         
-        # case 3: convert from metric to imperial
-        elif parse1[1] == "m" and parse2[1] != "m":
+        # case 3: convert from imperial to metric
+        elif parse1[1] != "m" and parse2[1] == "m":
+            s = str(self.__convertItoM(parse1, parse2))
+            for c in self.__prefixes:
+                if self.__prefixes[c] == parse2[1]:
+                    s += c
+            s += "m"
 
+            return s
+            
+        # case 4: convert from metric to imperial
+        else:
+            s = str(self.__convertMtoI(parse1, parse2))
+            for c in self.__lengths:
+                if self.__lengths[c] == parse2[1]:
+                    s += c
+            
+            return s
 
     
         return None
 
-
+    def convertArea(self,expr1,expr2):
+        return self.convertLength(expr1,expr2) + " sq"
+    
+    def convertVolume(self,expr1,expr2):
+        return self.convertLength(expr1,expr2) + " cb"
