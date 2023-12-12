@@ -3,6 +3,7 @@ from tkinter import ttk
 from singlevar import solve_single_variable_equation
 from Graph import Graph
 from Memory import show_memory
+from UnitConverter import UnitConverter
 from Trigonometry import calculate_trig_function
 from sympy import symbols, Eq, solve, simplify, tan, sin, cos, log, asin, acos, atan, ln, sympify
 from math import *
