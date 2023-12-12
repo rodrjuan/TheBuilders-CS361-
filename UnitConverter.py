@@ -15,7 +15,7 @@ MASSES = {
     "mg":pow(10,-3),
     "oz":1,
     "lb":16,
-    "ton":2000
+    "ton":32000
 }
 PREFIXES = {
     "T":pow(10,12),
@@ -29,7 +29,8 @@ PREFIXES = {
     "m":pow(10,-3),
     "mu":pow(10,-6),
     "n":pow(10,-9),
-    "p":pow(10,-12)
+    "p":pow(10,-12),
+    "0": 1              # placeholder value
 }
 
 """
@@ -93,24 +94,24 @@ class UnitConverter:
 
         # case1: metric
         if parse[1].endswith("g") and to_unit.endswith("g"):
-            return str(float(parse[0] * self.__masses[parse[1]]/ self.__masses[to_unit])) + to_unit
+            return str(float(parse[0] * self.__masses[parse[1]]/ self.__masses[to_unit])) + " " + to_unit
         # case2: imperial
         elif parse[1].endswith("g") == False and to_unit.endswith("g") == False:
-            return str(float(parse[0] * self.__masses[parse[1]]/ self.__masses[to_unit])) + to_unit
+            return str(float(parse[0] * self.__masses[parse[1]]/ self.__masses[to_unit])) + " " + to_unit
         # case3: MtoI
         elif parse[1].endswith("g") and to_unit.endswith("g") == False:
             val = float(parse[0] * self.__masses[parse[1]]/ self.__masses["g"])
 
-            val = val/28.35
+            val = val / 28.35
 
-            return str(val * self.__masses["oz"]/ self.__masses[to_unit]) + to_unit
+            return str(val * self.__masses["oz"]/ self.__masses[to_unit]) + " " + to_unit
         # case4: ItoM
         else:
             val = float(parse[0] * self.__masses[parse[1]]/ self.__masses["oz"])
 
             val = val * 28.35
 
-            return str(val * self.__masses["g"]/ self.__masses[to_unit]) + to_unit
+            return str(val * self.__masses["g"]/ self.__masses[to_unit]) + " " + to_unit
 
     """
      Function: toCelcius()
@@ -174,8 +175,8 @@ class UnitConverter:
         val = self.__convertImperial(parse1,[0,1,1,""])
 
         # convert to meters
-        factor = val/5280.00
-
+        factor = val / 39.37
+ 
         # convert from meters to desired output
         return self.__convertMetric([factor,"m",1,""], parse2)
 
@@ -201,13 +202,13 @@ class UnitConverter:
             for c in self.__prefixes:
                 if self.__prefixes[c] == parse2[2]:
                     x = c
-            return str(self.__convertMetric(parse1, parse2)) + x + "m"
+            return str(self.__convertMetric(parse1, parse2)) + x + " m"
         # case 2: both imperial
         elif parse1[1] != "m" and parse2[1] != "m":
             s = str(self.__convertImperial(parse1,parse2))
             for c in self.__lengths:
                 if self.__lengths[c] == parse2[1]:
-                    s += c
+                    s += " " + c
         
             return s
         
@@ -215,8 +216,8 @@ class UnitConverter:
         elif parse1[1] != "m" and parse2[1] == "m":
             s = str(self.__convertItoM(parse1, parse2))
             for c in self.__prefixes:
-                if self.__prefixes[c] == parse2[1]:
-                    s += c
+                if self.__prefixes[c] == parse2[2]:
+                    s += " " + c
             s += "m"
 
             return s
@@ -226,12 +227,9 @@ class UnitConverter:
             s = str(self.__convertMtoI(parse1, parse2))
             for c in self.__lengths:
                 if self.__lengths[c] == parse2[1]:
-                    s += c
+                    s += " " + c
             
             return s
-
-    
-        return None
 
     def convertArea(self,expr1,expr2):
         return self.convertLength(expr1,expr2) + " sq"

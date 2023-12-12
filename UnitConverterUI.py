@@ -85,33 +85,40 @@ OPTIONS = [
 
 # create test root object, initialize some values
 root = Tk()
-
 root.geometry( "200x300" )
 root.title("Main")
 
-# label to identify window
-l = Label(root, text = "This is the test root window")
 
 
 
 # create top level object associated with root window
 top = Toplevel(root)
-top.geometry("180x100")
+top.geometry("500x600")
 top.title("Unit Converter")
 
-l2 = Label(top, text = "Select units to convert.")
+# create a description of the window
+des = Label(top, text="Convert from one unit to another", font=("Helvetica", 12))
+des.grid(row=0)
 
+# create a dropdown menu for choosing units
+units = Menubutton(top, text = "SELECT")
+units.grid(row=1,column=0)
 
-# data type of menu text
-clicked = StringVar()
+for unit in UNITS:
+    
 
-# initial menu text
-clicked.set("m")
+# create a Entry box for user input
+Label(top, text="Enter a number:", font=("Helvetica", 12)).grid(row=1,column=1)
+entry = Entry(top)
+entry.grid(row=1,column=2)
 
-# create dropdown menu
-drop = OptionMenu( top, clicked, *LENGTHS)
-drop.pack()
+# create a dropdown menu for choosing input unit
 
+# create a dropdown menu for choosing output unit
+
+# create the calculate button
+button = Button(top, text="Calculate", width=10, font=("Helvetica", 12))
+button.grid(row=2)
 
 # execute tkinker
 root.mainloop()
