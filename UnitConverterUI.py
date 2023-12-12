@@ -79,7 +79,8 @@ OPTIONS = [
     "Area",
     "Volume",
     "Tempurature",
-    "Mass"
+    "Mass",
+    "SELECT"
 ]
 
 
@@ -104,8 +105,15 @@ des.grid(row=0)
 units = Menubutton(top, text = "SELECT")
 units.grid(row=1,column=0)
 
+units.menu = Menu(units, tearoff=0)
+units["menu"] = units.menu
 for unit in UNITS:
-    
+    units.menu.add_checkbutton(label=unit)
+units.grid()
+
+# logic to change label when user selects an option
+def selected(menu,text):
+    menu.option_add("text",text)
 
 # create a Entry box for user input
 Label(top, text="Enter a number:", font=("Helvetica", 12)).grid(row=1,column=1)
