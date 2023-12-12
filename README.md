@@ -1,5 +1,5 @@
 # Installation
-Before running, make sure to have python + pip working on your system. You will need the sympy and simplify packages.
+Before running, make sure to have python + pip working on your system. You will need the tkinter, sympy, and simplify packages.
 To build from source, download the source files and run Interface.py with either python or python3. (building locally recommended)
 This will open the main page.
 
