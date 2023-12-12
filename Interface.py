@@ -4,6 +4,7 @@ from singlevar import solve_single_variable_equation
 from Graph import Graph
 from Memory import show_memory
 from Trigonometry import calculate_trig_function
+from sympy import symbols, Eq, solve, simplify, tan, sin, cos, log, asin, acos, atan, ln, sympify
 from math import *
 
 def button_click(symbol):
@@ -27,7 +28,7 @@ def button_click(symbol):
             buttons_specs[i] = (*buttons_specs[i][:5], 0)
         update_button_sizes(None)
     elif symbol in ["tan", "sin", "cos", "cos⁻¹", "tan⁻¹", "sin⁻¹", "log", "ln"]:
-        current = f"{symbol}("
+        current += f"{symbol}("
     elif symbol == "Graph":
         graph = Graph()
     elif symbol == "Memory":
@@ -66,13 +67,11 @@ def button_click(symbol):
             display_area.insert(END, current)
             display_area.config(state=DISABLED)
         elif symbol in current in ["tan", "sin", "cos", "cos⁻¹", "tan⁻¹", "sin⁻¹"]:
-            trig_function, angle = current.split("(")
-            angle = float(angle[:-1])
-
-            # Call the calculate_trig_function from Trigonometry.py
-            result, original_result = calculate_trig_function(trig_function, angle)
+            equation_str = current.replace("tan⁻¹", "atan").replace("cos¹", "acos").replace("sin⁻¹", "asin")
+            equation = Eq(sympify(equation_str), 0)
+            result = solve(equation)
             calculations.append((current, result))
-            current = f"{current} \n{result[0]} ({original_result})"
+            current = f"{current} \n{result[0]})"
 
         else:
             currentcopy = current

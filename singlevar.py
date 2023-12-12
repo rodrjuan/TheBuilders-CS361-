@@ -27,4 +27,3 @@ def solve_single_variable_equation(equation_str):
         except Exception as e:
             return f"Error: {e}"
 
-
