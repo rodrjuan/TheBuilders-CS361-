@@ -14,17 +14,17 @@ def button_click(symbol):
         current = current[:-1]
     elif symbol in ["Conv"]:
         current = current
-    elif symbol == "SC mode":
+    elif symbol == "Scientific Calculator Mode":
         buttons_specs[0] = ("X", "1", "0", "1", 0.75, 0)
         buttons_specs[17] = ("Del", "1", "0", "1", 0.75, 1)
-        buttons_specs[13] = ("SC mode", "1", "1", "1", 1, 0)
+        buttons_specs[13] = ("Scientific Calculator Mode", "1", "1", "1", 1, 0)
         for i in range(2, 12):
             buttons_specs[i] = (*buttons_specs[i][:5], 1)
         update_button_sizes(None)
-    elif symbol == "Normal mode":
+    elif symbol == "Normal Mode":
         buttons_specs[0] = ("X", "1", "0", "1", 0.75, 1)
         buttons_specs[17] = ("Del", "3", "0", "1", 1, 1)
-        buttons_specs[13] = ("SC mode", "1", "1", "1", 1, 1)
+        buttons_specs[13] = ("Scientific Calculator Mode", "1", "1", "1", 1, 1)
         for i in range(2, 12):
             buttons_specs[i] = (*buttons_specs[i][:5], 0)
         update_button_sizes(None)
@@ -131,8 +131,8 @@ display_area.grid(row=0, column=0, columnspan=5, padx=(5, 10), pady=(5, 20))  #A
 buttons_specs = [
     ("X", "1", "0", "1", 0.75, 1), ("Graph", "1", "4", "1", 0.75, 1), ("sin", "2", "0", "1", 1, 0), ("sin⁻¹", "3", "0", "1", 1, 0),
     ("cos", "2", "1", "1", 1, 0), ("cos⁻¹", "3", "1", "1", 1, 0), ("tan", "2", "2", "1", 1, 0), ("tan⁻¹", "3", "2", "1", 1, 0),
-    ("log", "2", "3", "1", 1, 0), ("ln", "2", "4", "1", 1, 0), ("e", "3", "3", "1", 1, 0), ("Normal mode", "1", "1", "1", 1, 0),
-    ("^", "4", "0", "1", 1, 1),("SC mode", "1", "1", "1", 1, 1), ("Conv", "1", "2", "1", 1, 1), ("Memory", "1", "3", "1", 1, 1),
+    ("log", "2", "3", "1", 1, 0), ("ln", "2", "4", "1", 1, 0), ("e", "3", "3", "1", 1, 0), ("Normal Mode", "1", "1", "1", 1, 0),
+    ("^", "4", "0", "1", 1, 1),("Scientific Calculator Mode", "1", "1", "1", 1, 1), ("Unit Converter", "1", "2", "1", 1, 1), ("Memory", "1", "3", "1", 1, 1),
     ("x²", "5", "0", "1", 1, 1),("Del", "3", "0", "1", 1, 1), ("(", "4", "2", "1", 1, 1), (")", "4", "3", "1", 1, 1), ("*", "4", "4", "1", 1, 1),
     ("π", "7", "0", "1", 1, 1),("1", "5", "1", "1", 1, 1), ("2", "5", "2", "1", 1, 1), ("3", "5", "3", "1", 1, 1), ("/", "5", "4", "1", 1, 1),
     ("(-)", "4", "1", "1", 1, 1),("4", "6", "1", "1", 1, 1), ("5", "6", "2", "1", 1, 1), ("6", "6", "3", "1", 1, 1), ("-", "6", "4", "1", 1, 1),
