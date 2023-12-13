@@ -1,8 +1,7 @@
 # import dependencies
 from tkinter import *
-from tkinter import ttk
+import UnitConverter
 
-# CONSTANTS
 # drop down menu options
 LENGTHS = [
     "Tm",
@@ -16,117 +15,34 @@ LENGTHS = [
     "mm",
     "mum",
     "nm",
-    "pm",
-    "in",
-    "yd",
-    "mi"
+    "pm"
 ]
 
-AREAS = [
-    "Tm sq",
-    "Gm sq",
-    "Mm sq",
-    "km sq",
-    "m sq",
-    "dam sq",
-    "dm sq",
-    "cm sq",
-    "mm sq",
-    "mum sq",
-    "nm sq",
-    "pm sq",
-    "in sq",
-    "yd sq",
-    "mi sq"
-]
-
-VOLUMES = [
-    "Tm cb",
-    "Gm cb",
-    "Mm cb",
-    "km cb",
-    "m cb",
-    "dam cb",
-    "dm cb",
-    "cm cb",
-    "mm cb",
-    "mum cb",
-    "nm cb",
-    "pm cb",
-    "in cb",
-    "yd cb",
-    "mi cb"
-]
-
-TEMPS = [
-    "Kelvin",
-    "Celcius",
-    "Fehrinheit"
-]
-
-MASSES = [
-    "kg",
-    "g",
-    "mg",
-    "lb",
-    "oz",
-    "ton",
-
-]
-
-OPTIONS = [
-    "Length",
-    "Area",
-    "Volume",
-    "Tempurature",
-    "Mass",
-    "SELECT"
-]
-
-
-# create test root object, initialize some values
+# create object
 root = Tk()
-root.geometry( "200x300" )
-root.title("Main")
 
+root.geometry( "200x200" )
 
+# Change the label text
+def show():
+    label.convig( text = clicked.get())
 
+# data type of menu text
+clicked = StringVar()
 
-# create top level object associated with root window
-top = Toplevel(root)
-top.geometry("500x600")
-top.title("Unit Converter")
+# initial menu text
+clicked.set("m")
 
-# create a description of the window
-des = Label(top, text="Convert from one unit to another", font=("Helvetica", 12))
-des.grid(row=0)
+# create dropdown menu
+drop = OptionMenu( root, clicked, *LENGTHS)
+drop.pack()
 
-# create a dropdown menu for choosing units
-units = Menubutton(top, text = "SELECT")
-units.grid(row=1,column=0)
+# create button, change label text
+button = Button( root, text = "click me", command = show).pack()
 
-units.menu = Menu(units, tearoff=0)
-units["menu"] = units.menu
-for unit in UNITS:
-    units.menu.add_checkbutton(label=unit)
-units.grid()
-
-# logic to change label when user selects an option
-def selected(menu,text):
-    menu.option_add("text",text)
-
-# create a Entry box for user input
-Label(top, text="Enter a number:", font=("Helvetica", 12)).grid(row=1,column=1)
-entry = Entry(top)
-entry.grid(row=1,column=2)
-
-# create a dropdown menu for choosing input unit
-
-# create a dropdown menu for choosing output unit
-
-# create the calculate button
-button = Button(top, text="Calculate", width=10, font=("Helvetica", 12))
-button.grid(row=2)
+# create label
+label = Label(root, text = "")
+label.pack()
 
 # execute tkinker
 root.mainloop()
