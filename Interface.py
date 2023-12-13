@@ -36,14 +36,23 @@ def button_click(symbol):
         converter = UnitConverterUI()
     elif symbol == "History":
         show_memory(calculations)
+    elif symbol == "MC":
+        memory_saved[0] = ""
+    elif symbol == "MR":
+        current += memory_saved[0]
+    elif symbol == "MS":
+        memory_saved[0] = current
     elif symbol == "AC":
         current = ""
     elif symbol == "^":
         current += "**"
     elif symbol == "√":
         current += "sqrt("
-    elif symbol == "(-)":
-        current += "-"
+    elif symbol == "deg/rad":
+        if is_deg[0] == TRUE:
+            is_deg[0] = FALSE
+        else:
+            is_deg[0] = TRUE
     elif symbol == "π":
         current += "pi"
     elif symbol in ["+", "/", "-", "*", "x²"]:
@@ -79,6 +88,10 @@ def button_click(symbol):
         else:
             currentcopy = current
             addtomemory = TRUE
+            if is_deg[0] == TRUE:
+                if current.find("sin") > -1 or current.find("cos") > -1 or current.find("tan") > -1:
+                    current = current[:-1]
+                    current += "*(pi/180))"
             try:
                 current = eval(current)
             except:
@@ -144,7 +157,9 @@ buttons_specs = [
 
 buttons = []
 calculations = []
-
+memory_saved = [""]
+is_deg = [FALSE]
+    
 # Creates the initial button display on calculator
 create_buttons()
 
