@@ -100,8 +100,8 @@ class UnitConverterUI:
         rb1_select =StringVar(root,"Length")
         rb2_select =StringVar()
         rb3_select =StringVar()
-        rb2 = []
-        rb3 = []
+        rb2 = self.__createRadioButtons(root,rb2_select,LENGTHS,None)
+        rb3 = self.__createRadioButtons(root,rb3_select,LENGTHS,None)
         rb1 = self.__createRadioButtons(root,rb1_select,OPTIONS, None)
         i = 1
         for rb in rb1:
@@ -117,10 +117,17 @@ class UnitConverterUI:
         # create "from" list
         l3 = self.__createLabel(root,"From","15")
         l3.grid(row=2, column=1)
-
+        i = 3
+        for rb in rb2:
+            rb.grid(row=i,column=1,padx=10)
+            i = i+1
         # create "to" list
         l4 = self.__createLabel(root,"To","15")
         l4.grid(row=2, column=3)
+        i = 3
+        for rb in rb3:
+            rb.grid(row=i,column=3,padx=10)
+            i = i+1
 
         # create a result label
         l5 = self.__createLabel(root,"Result:","15")
@@ -130,8 +137,8 @@ class UnitConverterUI:
         button = self.__createCalculate(root)
         button.grid(row=3,column=5)
 
-    # determine which radio button has been selected
-    # def __selection(self,v,root,rb1,rb2):
+    # # determine which radio button has been selected
+    # def __selection(self,v,v1,v2,root,rb1,rb2):
     #     selected = v.get()
     #     print(selected)
     #     if selected == OPTIONS[0]:
@@ -154,7 +161,7 @@ class UnitConverterUI:
     # create top level object associated with root window
     def __createRoot(self):
         root = Toplevel(bg="light grey")
-        root.geometry("500x200")
+        root.geometry("500x500")
         root.title("Unit Converter")
         root.resizable(width=False, height=False)
 
@@ -169,18 +176,18 @@ class UnitConverterUI:
 
         return buttons
 
-    def __updateToFromButtons(self,root,v1,v2,rb1,rb2,l,cmd1,cmd2):
-        # if there are any 
-        if len(rb1) > 0:
-            self.__deleteRadioButtons(rb1)
-            self.__deleteRadioButtons(rb2)
+    # def __updateToFromButtons(self,root,v1,v2,rb1,rb2,l,cmd1,cmd2):
+    #     # if there are any 
+    #     if len(rb1) > 0:
+    #         self.__deleteRadioButtons(rb1)
+    #         self.__deleteRadioButtons(rb2)
 
-        rb1 = self.__createRadioButtons(root,v1,l,cmd1)
-        rb2 = self.__createRadioButtons(root,v2,l,cmd2)
+    #     rb1 = self.__createRadioButtons(root,v1,l,cmd1)
+    #     rb2 = self.__createRadioButtons(root,v2,l,cmd2)
 
-        i = 3
-        for rb in rb1:
-            rb.grid(row=i,column=1)
+    #     i = 3
+    #     for rb in rb1:
+    #         rb.grid(row=i,column=1)
         
     def __deleteRadioButtons(self,l):
         for x in l:
@@ -195,12 +202,3 @@ class UnitConverterUI:
         button = Button(root, text="Calculate", width=10)
         return button
             
-
-
-
-# # create the calculate button
-# button = Button(top, text="Calculate", width=10, font=("Helvetica", 12))
-# button.grid(row=3,column =1)
-
-# # execute tkinker
-# top.mainloop()
